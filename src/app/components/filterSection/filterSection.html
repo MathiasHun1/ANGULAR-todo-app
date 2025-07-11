@@ -1,0 +1,22 @@
+<aside class="category-section">
+  <div class="filters_container">
+    <h2>Szűrők</h2>
+    <ul>
+      @for (filter of defaultFilters(); track filter.name) {
+      <li
+        class="todo_item"
+        [ngClass]="{ active: filter.isActive }"
+        (click)="setFilterActive(filter.id)"
+      >
+        {{ filter.name }}
+      </li>
+      }
+    </ul>
+    <!-- <h2>Kategóriák</h2>
+    <ul></ul> -->
+  </div>
+
+  <div class="form_container">
+    <app-form (formSubmitted)="submissionDetector($event)" />
+  </div>
+</aside>

@@ -1,0 +1,53 @@
+.todo_section {
+  padding-inline: 3rem;
+}
+
+.todo_list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.todo_item {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.8fr auto;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: white;
+  border-radius: 8px;
+
+  .done {
+    padding: 4px;
+    background-color: lightgreen;
+    margin-left: 4px;
+  }
+
+  .pending {
+    padding: 4px;
+    background-color: burlywood;
+    margin-left: 4px;
+  }
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.button {
+  border: none;
+  padding: 0;
+  margin: 0;
+  padding: 4px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--clr-grey-400);
+  }
+}
+
+.toggle_box {
+  width: 1rem;
+  aspect-ratio: 1;
+}

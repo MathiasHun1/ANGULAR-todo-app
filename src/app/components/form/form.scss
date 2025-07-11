@@ -1,0 +1,19 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: var(--clr-grey-600);
+  padding: 2rem;
+  padding-top: 0.5rem;
+}
+
+.form_title {
+  font-size: 26px;
+  font-weight: bold;
+  text-align: center;
+  color: hsl(94, 75%, 55.1%);
+}
+
+.submit_button {
+  width: fit-content;
+}

@@ -1,0 +1,16 @@
+<form class="form" (ngSubmit)="submitForm(todoForm)" #todoForm="ngForm">
+  <p class="form_title">Új feladat</p>
+  <input
+    type="text"
+    name="title"
+    placeholder="Címke"
+    [(ngModel)]="form().title"
+  />
+  <input
+    type="date"
+    name="description"
+    placeholder="Leírás"
+    [(ngModel)]="form().deadline"
+  />
+  <button type="submit">Hozzáadás</button>
+</form>

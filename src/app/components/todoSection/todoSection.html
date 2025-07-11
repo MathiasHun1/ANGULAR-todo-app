@@ -1,0 +1,37 @@
+<div class="todo_section">
+  <ul class="todo_list">
+    @for (todo of todos(); track todo.id) {
+    <li class="todo_item">
+      <div>
+        <input
+          type="checkbox"
+          class="toggle_box"
+          [checked]="todo.isCompleted"
+          (change)="toggleItem(todo.id)"
+        />
+        @if (todo.isCompleted) { <span class="done">Kész</span> } @else if
+        (!todo.isCompleted) { <span class="pending">Függőben</span>
+        }
+      </div>
+
+      <div>
+        @if (editedTodoId() === todo.id) {
+        <input type="text" name="title" [value]="todo.title" />
+        } @else {
+        <p class="todo_title">{{ todo.title }}</p>
+        }
+      </div>
+
+      <p><span class="font_bold">határidő:</span> {{ todo.deadline }}</p>
+      <div class="buttons">
+        <button (click)="deleteItem(todo.id)" class="button del_button">
+          <img src="/delete.svg" alt="" />
+        </button>
+        <button class="button" (click)="toggleEditState(todo.id)">
+          <img src="/edit.svg" alt="" />
+        </button>
+      </div>
+    </li>
+    }
+  </ul>
+</div>
