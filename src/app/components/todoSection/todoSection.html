@@ -1,6 +1,6 @@
-<div class="todo_section">
+<div class="todo_section" (click)="closeEditState($event)">
   <ul class="todo_list">
-    @for (todo of todos(); track todo.id) {
+    @for (todo of rederedTodos(); track todo.id) {
     <li class="todo_item">
       <div>
         <input
@@ -15,19 +15,42 @@
       </div>
 
       <div>
-        @if (editedTodoId() === todo.id) {
-        <input type="text" name="title" [value]="todo.title" />
+        @if (editedTodo()?.id === todo.id) {
+        <input
+          type="text"
+          class="title_input"
+          name="title"
+          [value]="todo.title"
+          (input)="editTitle($event)"
+        />
         } @else {
         <p class="todo_title">{{ todo.title }}</p>
         }
       </div>
 
-      <p><span class="font_bold">határidő:</span> {{ todo.deadline }}</p>
+      <div class="deadline_cont">
+        <span class="font_bold">határidő: </span>
+        @if (editedTodo()?.id === todo.id) {
+        <input
+          type="date"
+          class="date_input"
+          name="deadline"
+          (change)="editDeadline($event)"
+        />
+        } @else {
+        <span>
+          {{ todo.deadline }}
+        </span>
+        }
+      </div>
       <div class="buttons">
         <button (click)="deleteItem(todo.id)" class="button del_button">
           <img src="/delete.svg" alt="" />
         </button>
-        <button class="button" (click)="toggleEditState(todo.id)">
+        <button
+          class="button edit_button"
+          (click)="openEditState(todo, $event)"
+        >
           <img src="/edit.svg" alt="" />
         </button>
       </div>

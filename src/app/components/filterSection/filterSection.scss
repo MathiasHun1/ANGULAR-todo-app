@@ -6,14 +6,11 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  h2 {
-    font-size: 18px;
-    font-weight: bold;
-  }
 }
 
 .todo_item {
+  padding-left: 8px;
+
   &:hover {
     cursor: pointer;
     background-color: var(--clr-grey-300);
@@ -22,4 +19,12 @@
 
 .active {
   background-color: var(--clr-grey-300);
+}
+
+.cat_title {
+  font-size: 1.5rem;
+}
+
+.cat_title:last-of-type {
+  margin-top: 1rem;
 }

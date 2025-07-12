@@ -20,6 +20,7 @@ export class FilterSection {
 
   protected categories = signal([]);
 
+  // practice child-parent communication
   protected submissionDetector(event: TodoModelBase): void {
     console.log('form submission detected from the parent');
     console.log('submitted data: ', event);

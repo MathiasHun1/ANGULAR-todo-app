@@ -83,6 +83,8 @@ ul {
 /* -------------
    GLOBAL STYLES
    ------------- */
+@import url("https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@100..800&family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap");
+
 :root {
   --clr-grey-100: hsl(0, 0%, 98%);
   --clr-grey-200: hsl(0, 0%, 94%);
@@ -96,11 +98,14 @@ ul {
 
   --clr-bg-green: hsl(100, 70%, 60%);
   --clr-bg-red: hsl(0, 70%, 60%);
+
+  --ff-base: "TikTok Sans", sans;
 }
 
 html,
 body {
   height: 100%;
+  font-family: var(--ff-base);
 }
 
 /* --------------
