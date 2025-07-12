@@ -1,5 +1,7 @@
 .todo_section {
   padding-inline: 3rem;
+  height: 100%;
+  position: relative;
 }
 
 .todo_list {
@@ -56,4 +58,28 @@
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.open_form {
+  background: black;
+  color: white;
+  padding: 8px 3rem;
+  border-radius: 999px;
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--clr-grey-700);
+  }
+}
+
+.form_container {
+  position: absolute;
+  inset: 0;
+  background-color: hsl(0, 0%, 0%, 0.8);
+  display: grid;
+  place-items: center;
 }

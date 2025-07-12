@@ -1,4 +1,4 @@
-import { Component, signal, inject, output } from '@angular/core';
+import { Component, signal, inject, output, input } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { TodoService } from '../../services/todoService';
 import { TodoModelBase } from '../../models/todoModel';
@@ -12,18 +12,17 @@ import { TodoModelBase } from '../../models/todoModel';
 export class Form {
   private readonly todoService = inject(TodoService);
 
+  requestCloseFrom = output();
+
   form = signal<TodoModelBase>({
     title: '',
     deadline: '',
     isCompleted: false,
   });
 
-  formSubmitted = output<TodoModelBase>();
-
   submitForm(form: NgForm): void {
     if (form.valid) {
       this.todoService.addTodo(this.form());
-      this.formSubmitted.emit(this.form());
 
       this.form.set({
         title: '',
@@ -31,5 +30,7 @@ export class Form {
         isCompleted: false,
       });
     }
+
+    this.requestCloseFrom.emit();
   }
 }

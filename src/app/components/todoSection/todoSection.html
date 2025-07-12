@@ -57,4 +57,15 @@
     </li>
     }
   </ul>
+
+  @if (formOpen()) {
+  <div class="form_container" (click)="closeForm($event)">
+    <app-form (requestCloseFrom)="closeForm(null)" />
+  </div>
+  } @else {
+
+  <button class="open_form" (click)="openForm()">
+    Új feladat hozzáadása +
+  </button>
+  }
 </div>

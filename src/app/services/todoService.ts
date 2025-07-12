@@ -57,10 +57,7 @@ export class TodoService {
 
   private filteredTodos: Signal<TodoModel[]> = computed(() => {
     const todos = this.todos();
-    console.log(todos);
-
     this.sortTodos(todos);
-    console.log('sorted: ', todos);
 
     const filter = this.filtersService.getActiveDefaultFilter();
 
