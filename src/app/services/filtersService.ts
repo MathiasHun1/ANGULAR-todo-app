@@ -5,7 +5,7 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { DefaultFilter } from '../models/filterModel';
+import { DefaultFilter, CategoryFilter } from '../models/filterModel';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
@@ -18,6 +18,24 @@ export class FiltersService {
     { name: 'Függőben', isActive: false, id: uuidv4() },
   ]);
 
+  private categoryFilters = signal<CategoryFilter[]>([
+    {
+      name: 'Mind',
+      isActive: true,
+      color: '',
+    },
+    {
+      name: 'Hobbi',
+      isActive: false,
+      color: 'green',
+    },
+    {
+      name: 'Munka',
+      isActive: false,
+      color: 'red',
+    },
+  ]);
+
   private activeFilterName: Signal<string> = computed(() => {
     const activeFilter = this.defaultFilters().find((f) => f.isActive);
     if (activeFilter) {
@@ -27,8 +45,16 @@ export class FiltersService {
     return 'Mind';
   });
 
-  // *********** Public ************ //
+  private activeCategoryName = computed<string>(() => {
+    const activeCategory = this.categoryFilters().find((f) => f.isActive);
+    if (activeCategory) {
+      return activeCategory.name;
+    }
+    console.error('error in setting acive category');
+    return 'Mind';
+  });
 
+  // *********** Default Filters API ************ //
   getAllDefaultFilters(): WritableSignal<DefaultFilter[]> {
     return this.defaultFilters; // returns a signal to keep the service reactive
   }
@@ -42,5 +68,49 @@ export class FiltersService {
       return f.id !== id ? { ...f, isActive: false } : { ...f, isActive: true };
     });
     this.defaultFilters.set(updatedFilters);
+  }
+
+  // *********** Categories API ************ //
+  getAllCategoryFilters(): WritableSignal<CategoryFilter[]> {
+    return this.categoryFilters;
+  }
+
+  getActivecategoryFilter(): string {
+    return this.activeCategoryName();
+  }
+
+  setCategoryActive(name: string) {
+    const updatedCategories = this.categoryFilters().map((f) => {
+      return f.name !== name
+        ? { ...f, isActive: false }
+        : { ...f, isActive: true };
+    });
+    this.categoryFilters.set(updatedCategories);
+  }
+
+  addCategory(category: CategoryFilter): void {
+    if (
+      this.categoryFilters().find(
+        (c) => c.name.toLowerCase() === category.name.toLowerCase()
+      )
+    ) {
+      console.error('category already exists!');
+      return;
+    }
+
+    const updatedCategories = this.categoryFilters().concat(category);
+    this.categoryFilters.set(updatedCategories);
+  }
+
+  deleteCategory(name: string) {
+    if (name === 'Mind') {
+      console.log('A "Mind" nevű szűrő nem törölhető');
+      return;
+    }
+
+    const updatedCategories = this.categoryFilters().filter(
+      (f) => f.name !== name
+    );
+    return updatedCategories;
   }
 }

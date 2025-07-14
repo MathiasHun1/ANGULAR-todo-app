@@ -1,5 +1,6 @@
 import { Component, inject, Signal, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { TodoService } from '../../services/todoService';
 import { TodoModel } from '../../models/todoModel';
 import { Form } from '../form/form';
@@ -9,12 +10,12 @@ import { format } from 'date-fns';
   selector: 'app-todos-section',
   templateUrl: './todoSection.html',
   styleUrl: './todoSection.scss',
-  imports: [FormsModule, Form],
+  imports: [FormsModule, Form, CommonModule],
 })
 export class TodoSection {
   todoService = inject(TodoService); // inject dependency
 
-  rederedTodos: Signal<TodoModel[]> = this.todoService.getFilteredTodos();
+  renderedTodos: Signal<TodoModel[]> = this.todoService.getFilteredTodos();
   editedTodo = signal<TodoModel | null>(null);
   newTitle = signal<string>('');
   formOpen = signal<boolean>(false);
@@ -51,6 +52,7 @@ export class TodoSection {
           deadline: editedTodo.deadline,
           isCompleted: editedTodo.isCompleted,
           id: editedTodo.id,
+          category: { ...editedTodo.category },
         });
       }
       this.editedTodo.set(null);

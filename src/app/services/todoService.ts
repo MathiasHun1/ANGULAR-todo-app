@@ -1,12 +1,4 @@
-import {
-  computed,
-  inject,
-  Injectable,
-  OnInit,
-  Signal,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { computed, inject, Injectable, Signal, signal } from '@angular/core';
 import { TodoModel, TodoModelBase } from '../models/todoModel';
 import { v4 as uuidv4 } from 'uuid';
 import { FiltersService } from './filtersService';
@@ -27,15 +19,23 @@ export class TodoService {
 
     this.todos.set([
       {
-        title: 'test title 1',
+        title: 'Test title 1',
         deadline: format(addDays(now, 5), 'yyyy-MM-dd'),
         isCompleted: false,
+        category: {
+          name: 'Munka',
+          color: 'red',
+        },
         id: uuidv4(),
       },
       {
         title: 'test title 2',
         deadline: format(addDays(now, 12), 'yyyy-MM-dd'),
         isCompleted: false,
+        category: {
+          name: 'Hobbi',
+          color: 'green',
+        },
         id: uuidv4(),
       },
       {
@@ -43,34 +43,46 @@ export class TodoService {
         deadline: format(addDays(now, 2), 'yyyy-MM-dd'),
         isCompleted: true,
         id: uuidv4(),
+        category: {
+          name: '',
+          color: '',
+        },
       },
     ]);
   }
-
-  constructor() {
-    if (this.todos().length === 0) {
-      this.loadDefaultTodos();
-    }
-  } // load some todos on init
-
-  // ********* PUBLIC ********** //
 
   private filteredTodos: Signal<TodoModel[]> = computed(() => {
     const todos = this.todos();
     this.sortTodos(todos);
 
     const filter = this.filtersService.getActiveDefaultFilter();
+    const categoryFilter = this.filtersService.getActivecategoryFilter();
+
+    let filterdByDefaultTodos: TodoModel[];
 
     switch (filter) {
       case 'Mind':
-        return todos;
+        filterdByDefaultTodos = todos;
+        break;
       case 'Befejezett':
-        return todos.filter((f) => f.isCompleted);
+        filterdByDefaultTodos = todos.filter((f) => f.isCompleted);
+        break;
       case 'Függőben':
-        return this.todos().filter((f) => !f.isCompleted);
+        filterdByDefaultTodos = this.todos().filter((f) => !f.isCompleted);
+        break;
       default:
-        return todos;
+        filterdByDefaultTodos = todos;
+        break;
     }
+
+    // filter the todos and return the result
+    if (categoryFilter === 'Mind') {
+      return filterdByDefaultTodos;
+    }
+
+    return filterdByDefaultTodos.filter(
+      (t) => t.category.name === categoryFilter
+    );
   });
 
   private sortTodos(todos: TodoModel[]): void {
@@ -84,6 +96,13 @@ export class TodoService {
 
       return timeStampA - timeStampB;
     });
+  }
+
+  // load some todos here, because lifecycle hooks not available in services
+  constructor() {
+    if (this.todos().length === 0) {
+      this.loadDefaultTodos();
+    }
   }
 
   // ************ Public *********** //

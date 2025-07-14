@@ -1,6 +1,6 @@
 <div class="todo_section" (click)="closeEditState($event)">
   <ul class="todo_list">
-    @for (todo of rederedTodos(); track todo.id) {
+    @for (todo of renderedTodos(); track todo.id) {
     <li class="todo_item">
       <div>
         <input
@@ -22,6 +22,7 @@
           name="title"
           [value]="todo.title"
           (input)="editTitle($event)"
+          #titleInput
         />
         } @else {
         <p class="todo_title">{{ todo.title }}</p>
@@ -54,6 +55,12 @@
           <img src="/edit.svg" alt="" />
         </button>
       </div>
+
+      @if (todo.category) {
+      <div [ngClass]="['category', todo.category.color]">
+        <span>{{ todo.category.name }}</span>
+      </div>
+      }
     </li>
     }
   </ul>

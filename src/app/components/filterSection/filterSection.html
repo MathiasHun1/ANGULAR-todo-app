@@ -1,10 +1,10 @@
-<aside class="category-section">
+<aside class="category-section" (click)="closeForm($event)">
   <div class="filters_container">
     <h2 class="cat_title">Státusz</h2>
     <ul>
       @for (filter of defaultFilters(); track filter.name) {
       <li
-        class="todo_item"
+        class="filter"
         [ngClass]="{ active: filter.isActive }"
         (click)="setFilterActive(filter.id)"
       >
@@ -13,6 +13,40 @@
       }
     </ul>
     <h2 class="cat_title">Kategóriák</h2>
-    <ul></ul>
+    <ul>
+      @for (category of categoryFilters(); track category.name) {
+      <li
+        class="filter"
+        [ngClass]="{ active: category.isActive }"
+        (click)="setCategoryActive(category.name)"
+      >
+        {{ category.name }}
+      </li>
+      }
+    </ul>
+  </div>
+
+  <div class="add_category_container">
+    @if (isAddingCategory()) {
+    <input type="text" class="category_input" #nameInput />
+    <select name="color" id="" #colorInput>
+      <option value="">szín</option>
+      <option value="blue" class="blue">kék</option>
+      <option value="green" class="green">zöld</option>
+      <option value="red" class="red">piros</option>
+    </select>
+    <button (click)="submitCategory(nameInput.value, colorInput.value)">
+      OK
+    </button>
+    } @else {
+
+    <button
+      class="add_category"
+      id="add_category"
+      (click)="isAddingCategory.set(!isAddingCategory())"
+    >
+      Új kategória +
+    </button>
+    }
   </div>
 </aside>

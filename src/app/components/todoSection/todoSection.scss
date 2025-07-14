@@ -17,7 +17,8 @@
   align-items: center;
   padding: 1rem 2rem;
   background-color: white;
-  border-radius: 8px;
+  border-radius: 6px;
+  position: relative;
 
   .done {
     padding: 4px;
@@ -82,4 +83,29 @@
   background-color: hsl(0, 0%, 0%, 0.8);
   display: grid;
   place-items: center;
+}
+
+.category {
+  position: absolute;
+  left: 20px;
+  top: 0;
+  width: fit-content;
+  transform: translateY(-55%);
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 999px;
+  padding-inline: 6px;
+  color: white;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.red {
+  background-color: red;
+}
+
+.green {
+  background-color: green;
 }

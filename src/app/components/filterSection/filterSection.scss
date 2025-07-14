@@ -8,7 +8,7 @@
   justify-content: space-between;
 }
 
-.todo_item {
+.filter {
   padding-left: 8px;
 
   &:hover {
@@ -27,4 +27,26 @@
 
 .cat_title:last-of-type {
   margin-top: 1rem;
+}
+
+.add_category {
+  background-color: black;
+  color: white;
+  border-radius: 999px;
+  padding-block: 8px;
+  width: 100%;
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--clr-grey-700);
+  }
+}
+
+.add_category_container {
+  display: flex;
+}
+
+.category_input {
+  width: 0px;
+  flex-grow: 1;
 }
