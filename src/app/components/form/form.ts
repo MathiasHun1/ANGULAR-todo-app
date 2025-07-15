@@ -3,6 +3,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { TodoService } from '../../services/todoService';
 import { TodoModelBase } from '../../models/todoModel';
 import { FiltersService } from '../../services/filtersService';
+import { NotificationService } from '../../services/notificationService';
 
 @Component({
   selector: 'app-form',
@@ -13,6 +14,7 @@ import { FiltersService } from '../../services/filtersService';
 export class Form {
   private readonly todoService = inject(TodoService);
   private readonly filterService = inject(FiltersService);
+  private readonly notificationService = inject(NotificationService);
   readonly EMPTY_CATEGORY = { name: '', color: '' };
 
   requestCloseFrom = output(); //event to close the from without submission
@@ -27,7 +29,15 @@ export class Form {
   categories = this.filterService.getAllCategoryFilters();
 
   submitForm(form: NgForm): void {
-    console.log(this.form());
+    if (!this.form().title) {
+      this.notificationService.setWarningMessage('Add meg a feladat nevét');
+      return;
+    }
+
+    if (!this.form().deadline) {
+      this.notificationService.setWarningMessage('Add meg a határidőt');
+      return;
+    }
 
     if (form.valid) {
       this.todoService.addTodo(this.form());

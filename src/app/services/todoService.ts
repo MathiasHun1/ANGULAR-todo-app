@@ -114,7 +114,9 @@ export class TodoService {
   addTodo(todo: TodoModelBase): void {
     const newTodo: TodoModel = { ...todo, id: uuidv4() };
     this.todos.set(this.todos().concat(newTodo));
-    this.notificationService.setSuccessMessage(newTodo.title);
+    this.notificationService.setSuccessMessage(
+      `"${newTodo.title}" feladat hozzáadva`
+    );
   }
 
   updateTodo(updatedTodo: TodoModel): void {
@@ -137,7 +139,9 @@ export class TodoService {
     const deletedTodo = this.todos().find((t) => t.id === id);
 
     if (deletedTodo) {
-      this.notificationService.setDeleteMessage(deletedTodo.title);
+      this.notificationService.setWarningMessage(
+        `"${deletedTodo.title}" feladat törölve`
+      );
       this.todos.set(this.todos().filter((t) => t.id !== id));
     }
   }

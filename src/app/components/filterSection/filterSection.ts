@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FiltersService } from '../../services/filtersService';
+import { NotificationService } from '../../services/notificationService';
 import { ColorPicker } from '../colorPicker/colorPicker';
 
 @Component({
@@ -17,6 +18,7 @@ import { ColorPicker } from '../colorPicker/colorPicker';
 })
 export class FilterSection {
   private filterSevice = inject(FiltersService);
+  private notificationService = inject(NotificationService);
   protected defaultFilters = this.filterSevice.getAllDefaultFilters();
   protected categoryFilters = this.filterSevice.getAllCategoryFilters();
   isAddingCategory = signal(false);
@@ -62,6 +64,16 @@ export class FilterSection {
   }
 
   submitCategory(nameInput: string, colorInput: string) {
+    if (!nameInput) {
+      this.notificationService.setWarningMessage('Adj meg egy kategória-nevet');
+      return;
+    }
+
+    if (!colorInput) {
+      this.notificationService.setWarningMessage('Adj hozzá színt!');
+      return;
+    }
+
     this.filterSevice.addCategory({
       name: nameInput.charAt(0).toUpperCase() + nameInput.slice(1),
       isActive: false,

@@ -7,20 +7,20 @@ import { PopupMessage } from '../models/nitificationModel';
 export class NotificationService {
   private currentMessage = signal<PopupMessage | null>(null);
 
-  setSuccessMessage(todoTitle: string): void {
+  setSuccessMessage(text: string): void {
     this.currentMessage.set({
-      message: `"${todoTitle}" című feladat hozzáadva`,
+      message: text,
       type: 'added',
     });
 
     setTimeout(() => {
       this.currentMessage.set(null);
-    }, 3000);
+    }, 8000);
   }
 
-  setDeleteMessage(todoTitle: string): void {
+  setWarningMessage(text: string): void {
     this.currentMessage.set({
-      message: `"${todoTitle}" című feladat törölve`,
+      message: text,
       type: 'deleted',
     });
 

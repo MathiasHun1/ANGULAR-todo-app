@@ -5,6 +5,7 @@
   background-color: hsl(243, 54%, 15%);
   display: grid;
   place-items: center;
+  position: relative;
 }
 
 .app-container {
@@ -30,11 +31,13 @@
   display: grid;
   grid-template-columns: 1fr 3fr;
   gap: 3rem;
+  position: relative;
 }
 
 .popup {
   padding-inline: 1rem;
   position: absolute;
+  top: 3rem;
   padding-block: 0.5rem;
   font-size: 1.5rem;
   border-radius: 12px;
@@ -45,6 +48,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   opacity: 0;
+  box-shadow: 0 0 10px 10px hsla(0, 0%, 0%, 0.2);
 }
 
 .popup_todo-added {
@@ -64,7 +68,6 @@
 }
 
 .title {
-  // color: greenyellow;
   color: #e23237;
   font-size: 2.5rem !important;
   margin-bottom: 1rem;
@@ -76,4 +79,38 @@
   display: inline-block;
   width: 180px;
   transform: translateY(77px);
+}
+
+.github_outer-cont {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: fit-content;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+  margin: 0 auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateY(-100%);
+}
+
+.github-icon_link {
+  background-color: white;
+  border-radius: 100%;
+  width: 40px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
+.github-icon {
+  transform: scale(1.05);
+}
+
+.code_text {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e23237;
 }
