@@ -10,10 +10,20 @@
 
 .filter {
   padding-left: 8px;
+  height: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
 
   &:hover {
     cursor: pointer;
     background-color: var(--clr-grey-300);
+  }
+
+  & div {
+    width: 12px;
+    height: 12px;
+    border-radius: 100%;
   }
 }
 
@@ -44,6 +54,13 @@
 
 .add_category_container {
   display: flex;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid;
+
+  & > * {
+    border: none;
+  }
 }
 
 .category_input {

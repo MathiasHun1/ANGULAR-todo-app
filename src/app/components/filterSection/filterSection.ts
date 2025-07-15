@@ -1,4 +1,10 @@
-import { Component, signal, WritableSignal, inject } from '@angular/core';
+import {
+  Component,
+  signal,
+  WritableSignal,
+  inject,
+  computed,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FiltersService } from '../../services/filtersService';
 
@@ -13,6 +19,28 @@ export class FilterSection {
   defaultFilters = this.filterSevice.getAllDefaultFilters();
   categoryFilters = this.filterSevice.getAllCategoryFilters();
   isAddingCategory = signal(false);
+  private readonly markerColors = [
+    'red',
+    'blue',
+    'yellow',
+    'pink',
+    'green',
+    'purple',
+  ];
+
+  availableColors = computed(() => {
+    const defaultColors = this.markerColors;
+    const usedColors = this.categoryFilters().map((f) => f.color);
+
+    const availableColors = defaultColors.filter(
+      (color) => !usedColors.includes(color)
+    );
+    return availableColors;
+  });
+
+  constructor() {
+    console.log(this.availableColors());
+  }
 
   setFilterActive(id: string) {
     this.filterSevice.setFilterActive(id);
@@ -43,5 +71,13 @@ export class FilterSection {
       isActive: false,
       color: colorInput,
     });
+  }
+
+  colorUsed(color: string) {
+    console.log('runs');
+
+    const element = this.categoryFilters().find((c) => c.color === color);
+
+    console.log(element?.color);
   }
 }
