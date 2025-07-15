@@ -54,16 +54,32 @@
 
 .add_category_container {
   display: flex;
-  border-radius: 999px;
-  overflow: hidden;
+  height: 40px;
   border: 1px solid;
+  border-radius: 999px;
 
   & > * {
     border: none;
   }
 }
 
+.add-category-button {
+  background-color: black;
+  color: white;
+  padding-right: 14px;
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
+}
+
 .category_input {
   width: 0px;
   flex-grow: 1;
+  padding-left: 12px;
+  border-top-left-radius: 9999px;
+  border-bottom-left-radius: 9999px;
+
+  &:focus,
+  &:active {
+    outline: none;
+  }
 }

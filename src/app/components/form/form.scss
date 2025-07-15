@@ -1,11 +1,14 @@
 .form {
+  width: 350px;
+  padding-inline: 2rem;
+  padding-top: 2.5rem;
+  padding-bottom: 4rem;
+  border-radius: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  background-color: var(--clr-grey-600);
-  padding: 2rem;
-  padding-top: 0.5rem;
-  width: 500px;
+  gap: 1rem;
+  background-color: white;
+  box-shadow: 0 0 15px 15px hsl(0, 0%, 0%, 0.2);
 }
 
 .form_title {
@@ -16,5 +19,24 @@
 }
 
 .submit_button {
-  width: fit-content;
+  border-radius: 999px;
+  height: 36px;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--clr-grey-700);
+  }
+}
+
+.input {
+  border-radius: 999px;
+  padding-block: 8px;
+  padding-inline: 12px;
+  border: 1px solid;
+}
+
+.select {
+  padding-right: 0;
 }

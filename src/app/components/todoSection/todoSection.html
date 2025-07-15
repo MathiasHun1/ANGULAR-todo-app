@@ -2,15 +2,17 @@
   <ul class="todo_list">
     @for (todo of renderedTodos(); track todo.id) {
     <li class="todo_item">
-      <div>
+      <div class="status_changer">
         <input
           type="checkbox"
           class="toggle_box"
           [checked]="todo.isCompleted"
           (change)="toggleItem(todo.id)"
         />
-        @if (todo.isCompleted) { <span class="done">Kész</span> } @else if
-        (!todo.isCompleted) { <span class="pending">Függőben</span>
+        @if (todo.isCompleted) {
+        <span class="status done">Kész</span>
+        } @else if (!todo.isCompleted) {
+        <span class="status pending">Függőben</span>
         }
       </div>
 

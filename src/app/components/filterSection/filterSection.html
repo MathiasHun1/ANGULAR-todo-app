@@ -1,4 +1,4 @@
-<aside class="category-section" (click)="closeForm($event)">
+<aside class="category-section">
   <div class="filters_container">
     <h2 class="cat_title">Státusz</h2>
     <ul>
@@ -30,26 +30,13 @@
   <div class="add_category_container">
     @if (isAddingCategory()) {
     <input type="text" class="category_input" #nameInput />
-    <select
-      name="color"
-      id=""
-      #colorInput
-      (change)="colorUsed(colorInput.value)"
+
+    <app-color-picker #colorPickerRef />
+
+    <button
+      class="add-category-button"
+      (click)="submitCategory(nameInput.value, colorPickerRef.pickedColor())"
     >
-      <option value="">szín</option>
-      @for (color of availableColors(); track color) {
-      <option [value]="color" [class]="color"></option>
-      }
-
-      <!-- <option value="blue" class="blue"></option>
-      <option value="green" class="green"></option>
-      <option value="red" class="red"></option>
-      <option value="yellow" class="yellow"></option>
-      <option value="pink" class="pink"></option>
-      <option value="purple" class="purple"></option> -->
-    </select>
-
-    <button (click)="submitCategory(nameInput.value, colorInput.value)">
       OK
     </button>
     } @else {

@@ -2,18 +2,21 @@
   <p class="form_title">Új feladat</p>
   <input
     type="text"
+    class="input"
     name="title"
     placeholder="Címke"
     [(ngModel)]="form().title"
   />
   <input
     type="date"
+    class="input"
     name="description"
     placeholder="Leírás"
     [(ngModel)]="form().deadline"
   />
   <select
     name="category"
+    class="input select"
     id=""
     (change)="logChange($event)"
     [(ngModel)]="form().category"
@@ -24,5 +27,5 @@
     <option [ngValue]="category">{{ category.name }}</option>
     } }
   </select>
-  <button type="submit">Hozzáadás</button>
+  <button type="submit" class="submit_button">Hozzáadás +</button>
 </form>

@@ -7,17 +7,18 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FiltersService } from '../../services/filtersService';
+import { ColorPicker } from '../colorPicker/colorPicker';
 
 @Component({
   selector: 'app-filter-section',
-  imports: [CommonModule],
+  imports: [CommonModule, ColorPicker],
   templateUrl: './filterSection.html',
   styleUrls: ['./filterSection.scss'],
 })
 export class FilterSection {
-  filterSevice = inject(FiltersService);
-  defaultFilters = this.filterSevice.getAllDefaultFilters();
-  categoryFilters = this.filterSevice.getAllCategoryFilters();
+  private filterSevice = inject(FiltersService);
+  protected defaultFilters = this.filterSevice.getAllDefaultFilters();
+  protected categoryFilters = this.filterSevice.getAllCategoryFilters();
   isAddingCategory = signal(false);
   private readonly markerColors = [
     'red',
@@ -37,10 +38,6 @@ export class FilterSection {
     );
     return availableColors;
   });
-
-  constructor() {
-    console.log(this.availableColors());
-  }
 
   setFilterActive(id: string) {
     this.filterSevice.setFilterActive(id);
@@ -65,12 +62,13 @@ export class FilterSection {
   }
 
   submitCategory(nameInput: string, colorInput: string) {
-    console.log(colorInput);
     this.filterSevice.addCategory({
       name: nameInput.charAt(0).toUpperCase() + nameInput.slice(1),
       isActive: false,
       color: colorInput,
     });
+
+    this.isAddingCategory.set(false);
   }
 
   colorUsed(color: string) {

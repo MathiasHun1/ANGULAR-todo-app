@@ -15,7 +15,7 @@ export class NotificationService {
 
     setTimeout(() => {
       this.currentMessage.set(null);
-    }, 2000);
+    }, 3000);
   }
 
   setDeleteMessage(todoTitle: string): void {

@@ -16,21 +16,30 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
+  padding-left: 0.7rem;
   background-color: white;
   border-radius: 6px;
   position: relative;
 
-  .done {
+  .status {
     padding: 4px;
-    background-color: lightgreen;
+    padding-inline: 6px;
+    border-radius: 6px;
     margin-left: 4px;
   }
 
-  .pending {
-    padding: 4px;
-    background-color: burlywood;
-    margin-left: 4px;
+  .done {
+    background-color: lightgreen;
   }
+
+  .pending {
+    background-color: burlywood;
+  }
+}
+
+.status_changer {
+  display: flex;
+  gap: 8px;
 }
 
 .buttons {
@@ -43,6 +52,9 @@
   padding: 0;
   margin: 0;
   padding: 4px;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: var(--clr-grey-300);
 
   &:hover {
     cursor: pointer;
@@ -80,32 +92,20 @@
 .form_container {
   position: absolute;
   inset: 0;
-  background-color: hsl(0, 0%, 0%, 0.8);
+  // background-color: hsl(0, 0%, 0%, 0.8);
   display: grid;
   place-items: center;
 }
 
 .category {
   position: absolute;
-  left: 20px;
   top: 0;
+  left: 50%;
   width: fit-content;
-  transform: translateY(-55%);
+  transform: translateY(-40%) translateX(-50%);
   font-size: 12px;
-  font-weight: bold;
+  font-weight: 600;
   border-radius: 999px;
-  padding-inline: 6px;
+  padding-inline: 10px;
   color: white;
-}
-
-.blue {
-  background-color: blue;
-}
-
-.red {
-  background-color: red;
-}
-
-.green {
-  background-color: green;
 }
