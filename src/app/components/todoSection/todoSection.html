@@ -90,10 +90,14 @@
       (requestCloseForm)="requestCloseTodoForm.emit()"
     />
   </div>
-  } @else {
-
-  <button class="open_form" (click)="requestOpenTodoForm.emit()">
-    Új feladat hozzáadása +
-  </button>
   }
+
+  <div class="open_form_container">
+    <button
+      [ngClass]="{ open_form: true, hidden: todoFormOpen() }"
+      (click)="requestOpenTodoForm.emit()"
+    >
+      Új feladat hozzáadása +
+    </button>
+  </div>
 </div>
