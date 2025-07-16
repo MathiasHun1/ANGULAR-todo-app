@@ -17,15 +17,15 @@ export class Form {
   private readonly notificationService = inject(NotificationService);
   readonly EMPTY_CATEGORY = { name: '', color: '' };
 
-  requestCloseFrom = output(); //event to close the from without submission
-
   form = signal<TodoModelBase>({
     title: '',
     deadline: '',
     isCompleted: false,
     category: this.EMPTY_CATEGORY,
   });
-
+  formOpen = input<boolean>();
+  requestOpenForm = output();
+  requestCloseForm = output();
   categories = this.filterService.getAllCategoryFilters();
 
   submitForm(form: NgForm): void {
@@ -51,13 +51,8 @@ export class Form {
           color: '',
         },
       });
+
+      this.requestCloseForm.emit();
     }
-
-    this.requestCloseFrom.emit();
-  }
-
-  logChange(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    console.log(target.value);
   }
 }

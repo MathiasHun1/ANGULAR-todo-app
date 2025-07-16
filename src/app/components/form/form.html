@@ -1,4 +1,9 @@
-<form class="form" (ngSubmit)="submitForm(todoForm)" #todoForm="ngForm">
+<form
+  class="form"
+  (ngSubmit)="submitForm(todoForm)"
+  #todoForm="ngForm"
+  data-form-container
+>
   <p class="form_title">Új feladat</p>
   <input
     type="text"
@@ -18,7 +23,6 @@
     name="category"
     class="input select"
     id=""
-    (change)="logChange($event)"
     [(ngModel)]="form().category"
   >
     <option [ngValue]="EMPTY_CATEGORY">Válassz kategóriát</option>
@@ -27,5 +31,7 @@
     <option [ngValue]="category">{{ category.name }}</option>
     } }
   </select>
-  <button type="submit" class="submit_button">Hozzáadás +</button>
+  <button type="submit" class="submit_button" (click)="requestOpenForm.emit()">
+    Hozzáadás +
+  </button>
 </form>

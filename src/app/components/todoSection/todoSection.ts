@@ -1,4 +1,12 @@
-import { Component, inject, Signal, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  Signal,
+  signal,
+  input,
+  output,
+  effect,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TodoService } from '../../services/todoService';
@@ -18,7 +26,18 @@ export class TodoSection {
   renderedTodos: Signal<TodoModel[]> = this.todoService.getFilteredTodos();
   editedTodo = signal<TodoModel | null>(null);
   newTitle = signal<string>('');
-  formOpen = signal<boolean>(false);
+  todoFormOpen = input<boolean>();
+  itemFormOpen = input<string>('');
+
+  constructor() {
+    effect(() => {});
+  }
+
+  requestOpenTodoForm = output();
+  requestCloseTodoForm = output();
+
+  requestOpenItemForm = output<string>();
+  requestCloseItemForm = output();
 
   deleteItem(id: string): void {
     this.todoService.deleteTodo(id);
@@ -28,35 +47,26 @@ export class TodoSection {
     this.todoService.toggleCompletion(id);
   }
 
-  openEditState(todo: TodoModel, event: MouseEvent) {
-    event.stopPropagation();
+  openEditState(todo: TodoModel) {
     this.editedTodo.set(todo);
-
-    this.newTitle.set(todo.title); // set the new title state
+    console.log(`passed id: "${this.itemFormOpen()}"`);
+    console.log(`in component id: "${this.editedTodo()?.id}"`);
   }
 
-  closeEditState(event: Event) {
-    const target = event.target as HTMLElement;
+  updateTodo() {
     const editedTodo = this.editedTodo();
 
-    // listen for "clicking outside"
-    if (
-      target.classList.contains('title_input') ||
-      target.classList.contains('date_input')
-    ) {
-      return;
-    } else {
-      if (editedTodo) {
-        this.saveTodo({
-          title: editedTodo.title,
-          deadline: editedTodo.deadline,
-          isCompleted: editedTodo.isCompleted,
-          id: editedTodo.id,
-          category: { ...editedTodo.category },
-        });
-      }
-      this.editedTodo.set(null);
+    if (editedTodo) {
+      this.todoService.updateTodo({
+        title: editedTodo.title,
+        deadline: editedTodo.deadline,
+        isCompleted: editedTodo.isCompleted,
+        id: editedTodo.id,
+        category: { ...editedTodo.category },
+      });
     }
+    this.editedTodo.set(null);
+    this.requestCloseItemForm.emit();
   }
 
   editTitle(event: Event) {
@@ -75,26 +85,5 @@ export class TodoSection {
     if (editedTodo) {
       this.editedTodo.set({ ...editedTodo, deadline: newDeadline });
     }
-  }
-
-  saveTodo(todo: TodoModel) {
-    this.todoService.updateTodo(todo);
-  }
-
-  openForm() {
-    this.formOpen.set(true);
-  }
-
-  closeForm(event: Event | null) {
-    if (event) {
-      const target = event.target as HTMLElement;
-      // listen for "clicking outside"
-      if (target && target.classList.contains('form_container')) {
-        return this.formOpen.set(false);
-      }
-      return;
-    }
-
-    this.formOpen.set(false);
   }
 }

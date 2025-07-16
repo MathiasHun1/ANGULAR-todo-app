@@ -4,6 +4,8 @@ import {
   WritableSignal,
   inject,
   computed,
+  output,
+  input,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FiltersService } from '../../services/filtersService';
@@ -19,9 +21,6 @@ import { ColorPicker } from '../colorPicker/colorPicker';
 export class FilterSection {
   private filterSevice = inject(FiltersService);
   private notificationService = inject(NotificationService);
-  protected defaultFilters = this.filterSevice.getAllDefaultFilters();
-  protected categoryFilters = this.filterSevice.getAllCategoryFilters();
-  isAddingCategory = signal(false);
   private readonly markerColors = [
     'red',
     'blue',
@@ -31,15 +30,19 @@ export class FilterSection {
     'purple',
   ];
 
-  availableColors = computed(() => {
+  protected defaultFilters = this.filterSevice.getAllDefaultFilters();
+  protected categoryFilters = this.filterSevice.getAllCategoryFilters();
+  protected availableColors = computed(() => {
     const defaultColors = this.markerColors;
     const usedColors = this.categoryFilters().map((f) => f.color);
-
     const availableColors = defaultColors.filter(
       (color) => !usedColors.includes(color)
     );
     return availableColors;
   });
+  formOpen = input();
+  requestCloseForm = output<{ type: 'categoryForm' }>();
+  requestOpenForm = output();
 
   setFilterActive(id: string) {
     this.filterSevice.setFilterActive(id);
@@ -47,20 +50,6 @@ export class FilterSection {
 
   setCategoryActive(name: string) {
     this.filterSevice.setCategoryActive(name);
-  }
-
-  closeForm(event: Event) {
-    const target = event.target as HTMLElement;
-
-    if (!this.isAddingCategory && target.id !== 'add_category') {
-      return;
-    }
-
-    if (target.parentElement) {
-      if (!target.parentElement.classList.contains('add_category_container')) {
-        this.isAddingCategory.set(false);
-      }
-    }
   }
 
   submitCategory(nameInput: string, colorInput: string) {
@@ -80,14 +69,6 @@ export class FilterSection {
       color: colorInput,
     });
 
-    this.isAddingCategory.set(false);
-  }
-
-  colorUsed(color: string) {
-    console.log('runs');
-
-    const element = this.categoryFilters().find((c) => c.color === color);
-
-    console.log(element?.color);
+    this.requestCloseForm.emit({ type: 'categoryForm' });
   }
 }

@@ -1,4 +1,4 @@
-<div class="app">
+<div class="app" (click)="handleClickOutsideForm($event)">
   <div class="app-container container">
     <header class="header">
       <h1 class="title">
@@ -7,11 +7,21 @@
       </h1>
     </header>
     <main class="main">
-      <app-filter-section />
-      <app-todos-section />
+      <app-filter-section
+        [formOpen]="categoryFormOpen()"
+        (requestCloseForm)="categoryFormOpen.set(false)"
+        (requestOpenForm)="categoryFormOpen.set(true)"
+      />
+      <app-todos-section
+        [todoFormOpen]="todoFormOpen()"
+        [itemFormOpen]="itemFormOpen()"
+        (requestOpenTodoForm)="todoFormOpen.set(true)"
+        (requestCloseTodoForm)="todoFormOpen.set(false)"
+        (requestOpenItemForm)="openItemForm($event)"
+        (requestCloseItemForm)="itemFormOpen.set('')"
+      />
 
       <div class="github_outer-cont">
-        <!-- <span class="code_text">Source</span> -->
         <a
           class="github-icon_link"
           href="https://github.com/MathiasHun1/ANGULAR-todo-app"

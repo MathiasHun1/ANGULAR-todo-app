@@ -27,8 +27,8 @@
     </ul>
   </div>
 
-  <div class="add_category_container">
-    @if (isAddingCategory()) {
+  <div class="add_category_container" data-form-container>
+    @if (formOpen()) {
     <input type="text" class="category_input" #nameInput />
 
     <app-color-picker #colorPickerRef />
@@ -44,7 +44,7 @@
     <button
       class="add_category"
       id="add_category"
-      (click)="isAddingCategory.set(!isAddingCategory())"
+      (click)="requestOpenForm.emit()"
     >
       Új kategória +
     </button>

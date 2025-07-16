@@ -15,7 +15,7 @@ export class NotificationService {
 
     setTimeout(() => {
       this.currentMessage.set(null);
-    }, 8000);
+    }, 5000);
   }
 
   setWarningMessage(text: string): void {
@@ -26,7 +26,7 @@ export class NotificationService {
 
     setTimeout(() => {
       this.currentMessage.set(null);
-    }, 2000);
+    }, 4000);
   }
 
   getMessage(): Signal<PopupMessage | null> {

@@ -1,7 +1,13 @@
-<div class="todo_section" (click)="closeEditState($event)">
+<div class="todo_section">
   <ul class="todo_list">
     @for (todo of renderedTodos(); track todo.id) {
-    <li class="todo_item">
+    <li
+      class="todo_item"
+      [ngClass]="[todo.id]"
+      data-item-container
+      [attr.data-todo-id]="todo.id"
+      #todoItem
+    >
       <div class="status_changer">
         <input
           type="checkbox"
@@ -17,7 +23,7 @@
       </div>
 
       <div>
-        @if (editedTodo()?.id === todo.id) {
+        @if (itemFormOpen() && editedTodo()?.id === todo.id) {
         <input
           type="text"
           class="title_input"
@@ -33,7 +39,7 @@
 
       <div class="deadline_cont">
         <span class="font_bold">határidő: </span>
-        @if (editedTodo()?.id === todo.id) {
+        @if (itemFormOpen() && editedTodo()?.id === todo.id) {
         <input
           type="date"
           class="date_input"
@@ -50,12 +56,22 @@
         <button (click)="deleteItem(todo.id)" class="button del_button">
           <img src="/delete.svg" alt="" />
         </button>
+
+        @if (itemFormOpen() && editedTodo()?.id === todo.id) {
+        <button class="button save_button" (click)="updateTodo()">
+          <img src="/save.svg" alt="" />
+        </button>
+        } @else {
         <button
           class="button edit_button"
-          (click)="openEditState(todo, $event)"
+          (click)="
+            openEditState(todo);
+            requestOpenItemForm.emit(todoItem.dataset['todoId']!)
+          "
         >
           <img src="/edit.svg" alt="" />
         </button>
+        }
       </div>
 
       @if (todo.category) {
@@ -67,13 +83,16 @@
     }
   </ul>
 
-  @if (formOpen()) {
-  <div class="form_container" (click)="closeForm($event)">
-    <app-form (requestCloseFrom)="closeForm(null)" />
+  @if (todoFormOpen()) {
+  <div class="form_container">
+    <app-form
+      [formOpen]="todoFormOpen()"
+      (requestCloseForm)="requestCloseTodoForm.emit()"
+    />
   </div>
   } @else {
 
-  <button class="open_form" (click)="openForm()">
+  <button class="open_form" (click)="requestOpenTodoForm.emit()">
     Új feladat hozzáadása +
   </button>
   }
