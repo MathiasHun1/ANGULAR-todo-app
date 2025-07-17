@@ -1,12 +1,4 @@
-import {
-  Component,
-  signal,
-  WritableSignal,
-  inject,
-  computed,
-  output,
-  input,
-} from '@angular/core';
+import { Component, inject, computed, output, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FiltersService } from '../../services/filtersService';
 import { NotificationService } from '../../services/notificationService';
@@ -23,25 +15,10 @@ export class FilterSection {
   private todoService = inject(TodoService);
   private filterSevice = inject(FiltersService);
   private notificationService = inject(NotificationService);
-  private readonly markerColors = [
-    'red',
-    'blue',
-    'yellow',
-    'pink',
-    'green',
-    'purple',
-  ];
 
   protected defaultFilters = this.filterSevice.getAllDefaultFilters();
   protected categoryFilters = this.filterSevice.getAllCategoryFilters();
-  protected availableColors = computed(() => {
-    const defaultColors = this.markerColors;
-    const usedColors = this.categoryFilters().map((f) => f.color);
-    const availableColors = defaultColors.filter(
-      (color) => !usedColors.includes(color)
-    );
-    return availableColors;
-  });
+
   formOpen = input();
   requestCloseForm = output<{ type: 'categoryForm' }>();
   requestOpenForm = output();

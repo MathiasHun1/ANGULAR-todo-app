@@ -25,7 +25,7 @@ export class App {
     console.log(`id from root: ${this.itemFormOpen()}`);
   }
 
-  //form-close handlers for "click outside" situation
+  //"Cclick outside" handler to close the forms
   handleClickOutsideForm(event: MouseEvent) {
     const target = event.target as HTMLElement;
 
@@ -55,9 +55,5 @@ export class App {
       }
       this.itemFormOpen.set('');
     }
-  }
-
-  logger() {
-    'runs';
   }
 }

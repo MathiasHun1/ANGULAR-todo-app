@@ -17,13 +17,13 @@ export class Form {
   private readonly notificationService = inject(NotificationService);
   readonly EMPTY_CATEGORY = { name: '', color: '' };
 
-  form = signal<TodoModelBase>({
+  protected form = signal<TodoModelBase>({
     title: '',
     deadline: '',
     isCompleted: false,
     category: this.EMPTY_CATEGORY,
   });
-  formOpen = input<boolean>();
+  formOpen = input<boolean>(false);
   requestOpenForm = output();
   requestCloseForm = output();
   categories = this.filterService.getAllCategoryFilters();

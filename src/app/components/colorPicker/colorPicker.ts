@@ -20,17 +20,16 @@ export class ColorPicker {
     'purple',
   ];
 
-  availableColors = computed(() => {
+  protected listOpened = signal(false);
+  pickedColor = signal('');
+  // return colors that are available (not used by any category)
+  protected readonly availableColors = computed(() => {
     const usedColors = this.categoryFilters().map((f) => f.color);
-
     const availableColors = this.defaultColors.filter(
       (color) => !usedColors.includes(color)
     );
     return availableColors;
   });
-
-  listOpened = signal(false);
-  pickedColor = signal('');
 
   toggleListOpened = () => this.listOpened.update((value) => !value);
 

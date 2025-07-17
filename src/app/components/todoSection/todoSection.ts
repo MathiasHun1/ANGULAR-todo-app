@@ -26,7 +26,7 @@ export class TodoSection {
   renderedTodos: Signal<TodoModel[]> = this.todoService.getFilteredTodos();
   editedTodo = signal<TodoModel | null>(null);
   newTitle = signal<string>('');
-  todoFormOpen = input<boolean>();
+  todoFormOpen = input<boolean>(false);
   itemFormOpen = input<string>('');
 
   constructor() {
