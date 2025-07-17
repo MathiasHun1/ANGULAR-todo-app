@@ -43,7 +43,12 @@
 
   <div class="add_category_container" data-form-container>
     @if (formOpen()) {
-    <input type="text" class="category_input" #nameInput />
+    <input
+      type="text"
+      class="category_input"
+      placeholder="kategória neve"
+      #nameInput
+    />
 
     <app-color-picker #colorPickerRef />
 
