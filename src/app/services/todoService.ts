@@ -19,7 +19,7 @@ export class TodoService {
 
     this.todos.set([
       {
-        title: 'Test title 1',
+        title: 'Berendelni a cementet',
         deadline: format(addDays(now, 5), 'yyyy-MM-dd'),
         isCompleted: false,
         category: {
@@ -29,7 +29,7 @@ export class TodoService {
         id: uuidv4(),
       },
       {
-        title: 'test title 2',
+        title: 'Peca makádon',
         deadline: format(addDays(now, 12), 'yyyy-MM-dd'),
         isCompleted: false,
         category: {
@@ -39,7 +39,27 @@ export class TodoService {
         id: uuidv4(),
       },
       {
-        title: 'test title 3',
+        title: 'Beszélni a könyvelővel',
+        deadline: format(addDays(now, 2), 'yyyy-MM-dd'),
+        isCompleted: true,
+        id: uuidv4(),
+        category: {
+          name: 'Munka',
+          color: 'red',
+        },
+      },
+      {
+        title: 'Kiporszívózni a kocsit',
+        deadline: format(addDays(now, 2), 'yyyy-MM-dd'),
+        isCompleted: false,
+        id: uuidv4(),
+        category: {
+          name: '',
+          color: '',
+        },
+      },
+      {
+        title: 'Kivinni a kukát',
         deadline: format(addDays(now, 2), 'yyyy-MM-dd'),
         isCompleted: true,
         id: uuidv4(),

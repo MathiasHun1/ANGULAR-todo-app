@@ -1,13 +1,11 @@
 import {
   computed,
-  inject,
   Injectable,
   Signal,
   signal,
   WritableSignal,
 } from '@angular/core';
 import { DefaultFilter, CategoryFilter } from '../models/filterModel';
-import { TodoService } from './todoService';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
