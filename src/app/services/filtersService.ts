@@ -1,11 +1,13 @@
 import {
   computed,
+  inject,
   Injectable,
   Signal,
   signal,
   WritableSignal,
 } from '@angular/core';
 import { DefaultFilter, CategoryFilter } from '../models/filterModel';
+import { TodoService } from './todoService';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
@@ -111,6 +113,6 @@ export class FiltersService {
     const updatedCategories = this.categoryFilters().filter(
       (f) => f.name !== name
     );
-    return updatedCategories;
+    this.categoryFilters.set(updatedCategories);
   }
 }

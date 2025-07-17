@@ -10,6 +10,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FiltersService } from '../../services/filtersService';
 import { NotificationService } from '../../services/notificationService';
+import { TodoService } from '../../services/todoService';
 import { ColorPicker } from '../colorPicker/colorPicker';
 
 @Component({
@@ -19,6 +20,7 @@ import { ColorPicker } from '../colorPicker/colorPicker';
   styleUrls: ['./filterSection.scss'],
 })
 export class FilterSection {
+  private todoService = inject(TodoService);
   private filterSevice = inject(FiltersService);
   private notificationService = inject(NotificationService);
   private readonly markerColors = [
@@ -48,7 +50,11 @@ export class FilterSection {
     this.filterSevice.setFilterActive(id);
   }
 
-  setCategoryActive(name: string) {
+  setCategoryActive(name: string, event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (target.closest('[data-delete-button]')) {
+      return;
+    }
     this.filterSevice.setCategoryActive(name);
   }
 
@@ -70,5 +76,18 @@ export class FilterSection {
     });
 
     this.requestCloseForm.emit({ type: 'categoryForm' });
+  }
+
+  deleteCategory(name: string) {
+    const answer = confirm(
+      'Bitosan törlöd a kategóriát, és a hozzá tartozó feladatokat?'
+    );
+    if (!answer) {
+      return;
+    }
+
+    this.todoService.deleteByCategory(name);
+    this.filterSevice.setCategoryActive('Mind');
+    this.filterSevice.deleteCategory(name);
   }
 }

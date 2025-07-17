@@ -83,3 +83,30 @@
     outline: none;
   }
 }
+
+.category-filter {
+  & button {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    margin-left: auto;
+    margin-right: 8px;
+    width: 24px;
+    padding: 6px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+
+    & svg {
+      fill: #b0b0b0;
+      width: 100%;
+    }
+  }
+
+  & button:hover {
+    & svg {
+      fill: red;
+    }
+  }
+}

@@ -145,4 +145,12 @@ export class TodoService {
       this.todos.set(this.todos().filter((t) => t.id !== id));
     }
   }
+
+  deleteByCategory(categoryName: string) {
+    const updatedTodoList = this.todos().filter(
+      (t) => t.category.name !== categoryName
+    );
+
+    this.todos.set(updatedTodoList);
+  }
 }
