@@ -36,7 +36,7 @@ export class FiltersService {
     },
   ]);
 
-  private activeFilterName: Signal<string> = computed(() => {
+  private activeFilterName = computed<string>(() => {
     const activeFilter = this.defaultFilters().find((f) => f.isActive);
     if (activeFilter) {
       return activeFilter.name;

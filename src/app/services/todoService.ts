@@ -3,72 +3,24 @@ import { TodoModel, TodoModelBase } from '../models/todoModel';
 import { v4 as uuidv4 } from 'uuid';
 import { FiltersService } from './filtersService';
 import { NotificationService } from './notificationService';
-import { format, addDays } from 'date-fns';
+import { createExapmleTodos } from '../shared/utilities';
+import { HttpClient, httpResource } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoService {
+  private readonly baseUrl = 'http://localhost:3000/todos';
+  private http = inject(HttpClient);
   private filtersService = inject(FiltersService);
   private notificationService = inject(NotificationService);
 
   private todos = signal<TodoModel[]>([]);
 
+  // not used now
   private loadDefaultTodos() {
-    const now = new Date();
-
-    this.todos.set([
-      {
-        title: 'Berendelni a cementet',
-        deadline: format(addDays(now, 5), 'yyyy-MM-dd'),
-        isCompleted: false,
-        category: {
-          name: 'Munka',
-          color: 'red',
-        },
-        id: uuidv4(),
-      },
-      {
-        title: 'Peca makádon',
-        deadline: format(addDays(now, 12), 'yyyy-MM-dd'),
-        isCompleted: false,
-        category: {
-          name: 'Hobbi',
-          color: 'green',
-        },
-        id: uuidv4(),
-      },
-      {
-        title: 'Beszélni a könyvelővel',
-        deadline: format(addDays(now, 2), 'yyyy-MM-dd'),
-        isCompleted: true,
-        id: uuidv4(),
-        category: {
-          name: 'Munka',
-          color: 'red',
-        },
-      },
-      {
-        title: 'Kiporszívózni a kocsit',
-        deadline: format(addDays(now, 2), 'yyyy-MM-dd'),
-        isCompleted: false,
-        id: uuidv4(),
-        category: {
-          name: '',
-          color: '',
-        },
-      },
-      {
-        title: 'Kivinni a kukát',
-        deadline: format(addDays(now, 2), 'yyyy-MM-dd'),
-        isCompleted: true,
-        id: uuidv4(),
-        category: {
-          name: '',
-          color: '',
-        },
-      },
-    ]);
+    this.todos.set(createExapmleTodos());
   }
 
   private filteredTodos: Signal<TodoModel[]> = computed(() => {
@@ -118,14 +70,11 @@ export class TodoService {
     });
   }
 
-  // load some todos here, because lifecycle hooks not available in services
-  constructor() {
-    if (this.todos().length === 0) {
-      this.loadDefaultTodos();
-    }
-  }
-
   // ************ Public *********** //
+
+  getAllTodos(): Observable<TodoModel[]> {
+    return this.http.get(this.baseUrl) as Observable<TodoModel[]>;
+  }
 
   getFilteredTodos(): Signal<TodoModel[]> {
     return this.filteredTodos;

@@ -13,6 +13,7 @@ import { TodoService } from '../../services/todoService';
 import { TodoModel } from '../../models/todoModel';
 import { Form } from '../form/form';
 import { format } from 'date-fns';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-todos-section',
@@ -23,22 +24,26 @@ import { format } from 'date-fns';
 export class TodoSection {
   todoService = inject(TodoService); // inject dependency
 
-  renderedTodos: Signal<TodoModel[]> = this.todoService.getFilteredTodos();
+  fetchedTodos$ = this.todoService.getAllTodos();
+  renderedTodos: Signal<TodoModel[] | undefined> = toSignal(
+    inject(TodoService).getAllTodos()
+  );
   editedTodo = signal<TodoModel | null>(null);
   newTitle = signal<string>('');
+
+  constructor() {
+    effect(() => console.log(this.renderedTodos()));
+  }
+
   todoFormOpen = input<boolean>(false);
   itemFormOpen = input<string>('');
 
-  constructor() {
-    effect(() => {});
-  }
-
   requestOpenTodoForm = output();
   requestCloseTodoForm = output();
-
   requestOpenItemForm = output<string>();
   requestCloseItemForm = output();
 
+  // --- Public methods --- //
   deleteItem(id: string): void {
     this.todoService.deleteTodo(id);
   }
