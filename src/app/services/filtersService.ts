@@ -16,7 +16,9 @@ import { NotificationService } from './notificationService';
   providedIn: 'root',
 })
 export class FiltersService {
-  baseUrl = 'http://localhost:3000/categoryFilters';
+  private readonly baseUrl =
+    'https://angular-todo-server.onrender.com/categoryFilters';
+
   // ---- DEPENDENCIES ---- //
   private readonly http = inject(HttpClient);
   private readonly notificationService = inject(NotificationService);

@@ -9,7 +9,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class TodoService {
-  private readonly baseUrl = 'http://localhost:3000/todos';
+  // private readonly baseUrl = 'http://localhost:3000/todos';
+  private readonly baseUrl = 'https://angular-todo-server.onrender.com/todos';
+
   private http = inject(HttpClient);
   private notificationService = inject(NotificationService);
 
