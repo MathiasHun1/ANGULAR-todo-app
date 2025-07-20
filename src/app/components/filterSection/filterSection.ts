@@ -17,7 +17,7 @@ export class FilterSection {
   private notificationService = inject(NotificationService);
 
   protected defaultFilters = this.filterSevice.getAllDefaultFilters();
-  protected categoryFilters = this.filterSevice.getAllCategoryFilters();
+  protected categoryFilters = this.filterSevice.categoryFilters;
 
   formOpen = input();
   requestCloseForm = output<{ type: 'categoryForm' }>();
@@ -27,12 +27,31 @@ export class FilterSection {
     this.filterSevice.setFilterActive(id);
   }
 
-  setCategoryActive(name: string, event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    if (target.closest('[data-delete-button]')) {
+  setCategoryActive(name: string, event?: MouseEvent) {
+    // return if delete button is clicked
+    const target = event?.target as HTMLElement | undefined;
+    if (target?.closest('[data-delete-button]')) {
       return;
     }
-    this.filterSevice.setCategoryActive(name);
+
+    const selectedFilter = this.categoryFilters().find((c) => c.name === name);
+    if (!selectedFilter) {
+      return;
+    }
+
+    this.categoryFilters().forEach((c) => {
+      if (c.name !== name) {
+        this.filterSevice.updateCategoryByName(c.name, {
+          ...c,
+          isActive: false,
+        }); // unselect
+      } else {
+        this.filterSevice.updateCategoryByName(c.name, {
+          ...c,
+          isActive: true,
+        }); // select
+      }
+    });
   }
 
   submitCategory(nameInput: string, colorInput: string) {
@@ -64,7 +83,7 @@ export class FilterSection {
     }
 
     this.todoService.deleteByCategory(name);
-    this.filterSevice.setCategoryActive('Mind');
-    this.filterSevice.deleteCategory(name);
+    this.setCategoryActive('Mind');
+    this.filterSevice.deleteCategoryByName(name);
   }
 }

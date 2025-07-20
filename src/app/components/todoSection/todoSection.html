@@ -13,7 +13,7 @@
           type="checkbox"
           class="toggle_box"
           [checked]="todo.isCompleted"
-          (change)="toggleItem(todo.id)"
+          (change)="toggleCompletion(todo.id)"
         />
         @if (todo.isCompleted) {
         <span class="status done">Kész</span>

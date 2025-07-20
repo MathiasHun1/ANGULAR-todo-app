@@ -8,4 +8,5 @@ export interface CategoryFilter {
   name: string;
   isActive: boolean;
   color: string;
+  id: string;
 }

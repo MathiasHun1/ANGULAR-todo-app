@@ -58,3 +58,23 @@ export function createExapmleTodos(): TodoModel[] {
     },
   ];
 }
+
+export function sortTodos(todos: TodoModel[]): TodoModel[] {
+  const todosCopy = todos.map((todo) => ({
+    ...todo,
+    category: { ...todo.category },
+  }));
+
+  todosCopy.sort((a, b) => {
+    // make comparable number values from the date properties
+    const deadlineA = new Date(a.deadline);
+    const deadlineB = new Date(b.deadline);
+
+    const timeStampA = deadlineA.getTime();
+    const timeStampB = deadlineB.getTime();
+
+    return timeStampA - timeStampB;
+  });
+
+  return todosCopy;
+}

@@ -5,15 +5,18 @@ import {
   signal,
   input,
   output,
-  effect,
+  computed,
+  OnInit,
+  WritableSignal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TodoService } from '../../services/todoService';
 import { TodoModel } from '../../models/todoModel';
 import { Form } from '../form/form';
-import { format } from 'date-fns';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { FiltersService } from '../../services/filtersService';
+import { sortTodos } from '../../shared/utilities';
 
 @Component({
   selector: 'app-todos-section',
@@ -22,34 +25,78 @@ import { toSignal } from '@angular/core/rxjs-interop';
   imports: [FormsModule, Form, CommonModule],
 })
 export class TodoSection {
-  todoService = inject(TodoService); // inject dependency
+  // --- DEPENDENCIES --- //
 
-  fetchedTodos$ = this.todoService.getAllTodos();
-  renderedTodos: Signal<TodoModel[] | undefined> = toSignal(
-    inject(TodoService).getAllTodos()
-  );
-  editedTodo = signal<TodoModel | null>(null);
-  newTitle = signal<string>('');
+  private todoService = inject(TodoService);
+  private filtersService = inject(FiltersService);
 
-  constructor() {
-    effect(() => console.log(this.renderedTodos()));
-  }
+  // --- INPUTS --- //
 
   todoFormOpen = input<boolean>(false);
   itemFormOpen = input<string>('');
+
+  // --- OUTPUTS --- //
 
   requestOpenTodoForm = output();
   requestCloseTodoForm = output();
   requestOpenItemForm = output<string>();
   requestCloseItemForm = output();
 
-  // --- Public methods --- //
+  // --- SIGNALS --- //
+
+  editedTodo = signal<TodoModel | null>(null);
+  newTitle = signal<string>('');
+  fetchedTodos: WritableSignal<TodoModel[] | undefined> =
+    this.todoService.todos;
+
+  renderedTodos: Signal<TodoModel[] | undefined> = computed(() => {
+    const todos = this.fetchedTodos();
+    if (!todos) {
+      return;
+    }
+
+    const filter = this.filtersService.getActiveDefaultFilter();
+    const categoryFilter = this.filtersService.getActivecategoryName();
+
+    let filterdByDefaultTodos: TodoModel[];
+
+    switch (filter) {
+      case 'Mind':
+        filterdByDefaultTodos = todos;
+        break;
+      case 'Befejezett':
+        filterdByDefaultTodos = todos.filter((f) => f.isCompleted);
+        break;
+      case 'Függőben':
+        filterdByDefaultTodos = todos.filter((f) => !f.isCompleted);
+        break;
+      default:
+        filterdByDefaultTodos = todos;
+        break;
+    }
+
+    if (categoryFilter === 'Mind') {
+      return sortTodos(filterdByDefaultTodos);
+    }
+
+    return sortTodos(
+      filterdByDefaultTodos.filter((t) => t.category.name === categoryFilter)
+    );
+  });
+
+  // --- PUBLIC METHODS --- //
+
   deleteItem(id: string): void {
     this.todoService.deleteTodo(id);
   }
 
-  toggleItem(id: string) {
-    this.todoService.toggleCompletion(id);
+  toggleCompletion(id: string) {
+    const todo = this.fetchedTodos()?.find((t) => t.id === id);
+
+    if (todo) {
+      todo.isCompleted = !todo.isCompleted;
+      this.todoService.updateTodo(todo);
+    }
   }
 
   openEditState(todo: TodoModel) {
@@ -62,13 +109,7 @@ export class TodoSection {
     const editedTodo = this.editedTodo();
 
     if (editedTodo) {
-      this.todoService.updateTodo({
-        title: editedTodo.title,
-        deadline: editedTodo.deadline,
-        isCompleted: editedTodo.isCompleted,
-        id: editedTodo.id,
-        category: { ...editedTodo.category },
-      });
+      this.todoService.updateTodo(editedTodo);
     }
     this.editedTodo.set(null);
     this.requestCloseItemForm.emit();

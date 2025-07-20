@@ -10,7 +10,7 @@ import { FiltersService } from '../../services/filtersService';
 })
 export class ColorPicker {
   private filterService = inject(FiltersService);
-  private categoryFilters = this.filterService.getAllCategoryFilters();
+  private categoryFilters = this.filterService.categoryFilters;
   private readonly defaultColors = [
     'red',
     'blue',

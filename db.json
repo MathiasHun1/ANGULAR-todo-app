@@ -1,34 +1,14 @@
 {
   "todos": [
     {
-      "title": "Berendelni a cementet",
+      "title": "Peca ",
       "deadline": "2025-07-20",
-      "isCompleted": false,
-      "category": {
-        "name": "Munka",
-        "color": "red"
-      },
-      "id": 1
-    },
-    {
-      "title": "Peca makádon",
-      "deadline": "2025-07-20",
-      "isCompleted": false,
+      "isCompleted": true,
       "category": {
         "name": "Hobbi",
         "color": "green"
       },
-      "id": 2
-    },
-    {
-      "title": "Beszélni a könyvelővel",
-      "deadline": "2025-07-25",
-      "isCompleted": true,
-      "category": {
-        "name": "Munka",
-        "color": "red"
-      },
-      "id": 3
+      "id": "2"
     },
     {
       "title": "Kiporszívózni a kocsit",
@@ -38,7 +18,7 @@
         "name": "",
         "color": ""
       },
-      "id": 4
+      "id": "4"
     },
     {
       "title": "Kivinni a kukát",
@@ -48,7 +28,51 @@
         "name": "",
         "color": ""
       },
-      "id": 5
+      "id": "5"
+    },
+    {
+      "id": "1ab3c2fb-c9f2-4f8c-ba7c-a29edc5b8f8a",
+      "title": "beszélni a könyvelővel",
+      "deadline": "2025-07-23",
+      "isCompleted": false,
+      "category": {
+        "name": "Munka",
+        "isActive": false,
+        "color": "red",
+        "id": "cfb3bb37-ca24-4a22-99f9-89084bd2ca15"
+      }
+    },
+    {
+      "id": "41e9b054-2e75-409e-8b8a-55efa63eda55",
+      "title": "woltozni",
+      "deadline": "2025-07-21",
+      "isCompleted": true,
+      "category": {
+        "name": "Munka",
+        "isActive": false,
+        "color": "red",
+        "id": "cfb3bb37-ca24-4a22-99f9-89084bd2ca15"
+      }
+    }
+  ],
+  "categoryFilters": [
+    {
+      "name": "Mind",
+      "isActive": false,
+      "color": "",
+      "id": "1"
+    },
+    {
+      "name": "Hobbi",
+      "isActive": false,
+      "color": "green",
+      "id": "2"
+    },
+    {
+      "id": "dfc6",
+      "name": "Munka",
+      "isActive": true,
+      "color": "red"
     }
   ]
 }

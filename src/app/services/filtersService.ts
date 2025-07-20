@@ -1,5 +1,6 @@
 import {
   computed,
+  inject,
   Injectable,
   Signal,
   signal,
@@ -7,36 +8,36 @@ import {
 } from '@angular/core';
 import { DefaultFilter, CategoryFilter } from '../models/filterModel';
 import { v4 as uuidv4 } from 'uuid';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { NotificationService } from './notificationService';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FiltersService {
-  private defaultFilters = signal<DefaultFilter[]>([
+  baseUrl = 'http://localhost:3000/categoryFilters';
+  // ---- DEPENDENCIES ---- //
+  private readonly http = inject(HttpClient);
+  private readonly notificationService = inject(NotificationService);
+
+  // ---- SIGNALS ---- //
+  defaultFilters = signal<DefaultFilter[]>([
     { name: 'Mind', isActive: true, id: uuidv4() },
     { name: 'Befejezett', isActive: false, id: uuidv4() },
     { name: 'Függőben', isActive: false, id: uuidv4() },
   ]);
 
-  private categoryFilters = signal<CategoryFilter[]>([
+  categoryFilters = signal<CategoryFilter[]>([
     {
       name: 'Mind',
       isActive: true,
       color: '',
-    },
-    {
-      name: 'Hobbi',
-      isActive: false,
-      color: 'green',
-    },
-    {
-      name: 'Munka',
-      isActive: false,
-      color: 'red',
+      id: '0',
     },
   ]);
 
-  private activeFilterName = computed<string>(() => {
+  activeFilterName = computed<string>(() => {
     const activeFilter = this.defaultFilters().find((f) => f.isActive);
     if (activeFilter) {
       return activeFilter.name;
@@ -45,14 +46,18 @@ export class FiltersService {
     return 'Mind';
   });
 
-  private activeCategoryName = computed<string>(() => {
+  activeCategoryName = computed<string>(() => {
     const activeCategory = this.categoryFilters().find((f) => f.isActive);
     if (activeCategory) {
       return activeCategory.name;
     }
-    console.error('error in setting acive category');
     return 'Mind';
   });
+
+  //initialize category filters
+  constructor() {
+    this.getAllCategoryFilters();
+  }
 
   // *********** Default Filters API ************ //
   getAllDefaultFilters(): WritableSignal<DefaultFilter[]> {
@@ -70,47 +75,75 @@ export class FiltersService {
     this.defaultFilters.set(updatedFilters);
   }
 
-  // *********** Categories API ************ //
-  getAllCategoryFilters(): WritableSignal<CategoryFilter[]> {
-    return this.categoryFilters;
+  // *********** Category filters API ************ //
+  getAllCategoryFilters(): void {
+    const result$ = this.http.get(this.baseUrl) as Observable<CategoryFilter[]>;
+
+    result$.subscribe((categories) => {
+      this.categoryFilters.update((prev) => categories);
+    });
   }
 
-  getActivecategoryFilter(): string {
+  getActivecategoryName(): string {
     return this.activeCategoryName();
   }
 
-  setCategoryActive(name: string) {
-    const updatedCategories = this.categoryFilters().map((f) => {
-      return f.name !== name
-        ? { ...f, isActive: false }
-        : { ...f, isActive: true };
-    });
-    this.categoryFilters.set(updatedCategories);
-  }
-
-  addCategory(category: CategoryFilter): void {
+  addCategory(newCategory: Omit<CategoryFilter, 'id'>): void {
     if (
       this.categoryFilters().find(
-        (c) => c.name.toLowerCase() === category.name.toLowerCase()
+        (c) => c.name.toLowerCase() === newCategory.name.toLowerCase()
       )
     ) {
-      console.error('category already exists!');
+      this.notificationService.setWarningMessage('Ez a kategória már létezik');
       return;
     }
 
-    const updatedCategories = this.categoryFilters().concat(category);
-    this.categoryFilters.set(updatedCategories);
+    const newCAtegoryWithId = { ...newCategory, id: uuidv4() };
+
+    const result$ = this.http.post(this.baseUrl, newCAtegoryWithId);
+    result$.subscribe(() => {
+      this.categoryFilters.update((prev) => prev.concat(newCAtegoryWithId));
+    });
   }
 
-  deleteCategory(name: string) {
-    if (name === 'Mind') {
-      console.log('A "Mind" nevű szűrő nem törölhető');
+  updateCategoryByName(name: string, data: CategoryFilter) {
+    const categoryToUpdate = this.categoryFilters().find(
+      (c) => c.name === name
+    );
+
+    if (!categoryToUpdate) {
       return;
     }
 
-    const updatedCategories = this.categoryFilters().filter(
-      (f) => f.name !== name
+    const response$ = this.http.put(
+      `${this.baseUrl}/${categoryToUpdate.id}`,
+      data
     );
-    this.categoryFilters.set(updatedCategories);
+
+    response$.subscribe(() => {
+      this.categoryFilters.update((prev) =>
+        prev.map((c) => (c.id !== categoryToUpdate.id ? c : data))
+      );
+    });
+  }
+
+  deleteCategoryByName(name: string) {
+    if (name === 'Mind') {
+      console.log('A "Mind" nevű kategória nem törölhető');
+      return;
+    }
+
+    const deletedCategory = this.categoryFilters().find((c) => c.name === name);
+    if (!deletedCategory) {
+      return;
+    }
+
+    const result$ = this.http.delete(`${this.baseUrl}/${deletedCategory.id}`);
+    result$.subscribe(() => {
+      const updatedCategories = this.categoryFilters().filter(
+        (f) => f.id !== deletedCategory.id
+      );
+      this.categoryFilters.set(updatedCategories);
+    });
   }
 }

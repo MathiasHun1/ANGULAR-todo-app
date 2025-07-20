@@ -26,7 +26,7 @@ export class Form {
   formOpen = input<boolean>(false);
   requestOpenForm = output();
   requestCloseForm = output();
-  categories = this.filterService.getAllCategoryFilters();
+  categoryFilters = this.filterService.categoryFilters;
 
   submitForm(form: NgForm): void {
     if (!this.form().title) {
