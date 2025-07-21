@@ -11,13 +11,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { NotificationService } from './notificationService';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FiltersService {
-  private readonly baseUrl =
-    'https://angular-todo-server.onrender.com/categoryFilters';
+  private readonly baseUrl = `${environment.apiUrl}/categoryFilters`;
 
   // ---- DEPENDENCIES ---- //
   private readonly http = inject(HttpClient);

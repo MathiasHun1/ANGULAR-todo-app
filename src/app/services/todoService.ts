@@ -4,13 +4,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { NotificationService } from './notificationService';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoService {
   // private readonly baseUrl = 'http://localhost:3000/todos';
-  private readonly baseUrl = 'https://angular-todo-server.onrender.com/todos';
+  private readonly baseUrl = `${environment.apiUrl}/todos`;
 
   private http = inject(HttpClient);
   private notificationService = inject(NotificationService);

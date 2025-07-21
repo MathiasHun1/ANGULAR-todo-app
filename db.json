@@ -43,22 +43,22 @@
       }
     },
     {
-      "id": "41e9b054-2e75-409e-8b8a-55efa63eda55",
-      "title": "woltozni",
-      "deadline": "2025-07-21",
-      "isCompleted": true,
+      "id": "acc58e1c-692e-4243-a062-ca3f0f9d8a00",
+      "title": "aaaaaaaaaa",
+      "deadline": "2025-08-19",
+      "isCompleted": false,
       "category": {
+        "id": "dfc6",
         "name": "Munka",
         "isActive": false,
-        "color": "red",
-        "id": "cfb3bb37-ca24-4a22-99f9-89084bd2ca15"
+        "color": "red"
       }
     }
   ],
   "categoryFilters": [
     {
       "name": "Mind",
-      "isActive": false,
+      "isActive": true,
       "color": "",
       "id": "1"
     },
@@ -71,7 +71,7 @@
     {
       "id": "dfc6",
       "name": "Munka",
-      "isActive": true,
+      "isActive": false,
       "color": "red"
     }
   ]
