@@ -116,3 +116,25 @@
 .hidden {
   visibility: hidden;
 }
+
+.loading-box {
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.loading-svg {
+  display: inline-block;
+  width: 30px;
+  transform: translateY(8px);
+  margin-left: 4px;
+}
+
+.subtext {
+  font-size: 14px;
+  max-width: 50ch;
+  padding-bottom: 2rem;
+}

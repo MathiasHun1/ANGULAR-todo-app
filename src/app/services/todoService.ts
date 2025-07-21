@@ -22,15 +22,15 @@ export class TodoService {
   }
 
   // ************ Public *********** //
+  loading = signal(true);
   todos = signal<TodoModel[] | undefined>([]);
 
   getAllTodos(): void {
-    console.log('runs');
-
     const fethedTodos$ = this.http.get(this.baseUrl) as Observable<TodoModel[]>;
     fethedTodos$.subscribe({
       next: (todos) => {
         this.todos.set(todos);
+        this.loading.set(false);
       },
     });
   }

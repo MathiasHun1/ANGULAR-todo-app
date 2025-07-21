@@ -43,12 +43,12 @@ export class TodoSection {
   requestCloseItemForm = output();
 
   // --- SIGNALS --- //
-
-  editedTodo = signal<TodoModel | null>(null);
-  newTitle = signal<string>('');
+  dataLoading = this.todoService.loading;
   fetchedTodos: WritableSignal<TodoModel[] | undefined> =
     this.todoService.todos;
 
+  editedTodo = signal<TodoModel | null>(null);
+  newTitle = signal<string>('');
   renderedTodos: Signal<TodoModel[] | undefined> = computed(() => {
     const todos = this.fetchedTodos();
     if (!todos) {

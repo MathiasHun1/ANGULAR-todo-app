@@ -1,4 +1,21 @@
 <div class="todo_section">
+  @if (dataLoading()) {
+  <div class="loading-box">
+    <p>
+      Adatok betöltése
+      <span class="loading-svg">
+        <img src="/loading.svg" alt="" />
+      </span>
+    </p>
+
+    <p class="subtext">
+      ** Az adatok tárolására használt szerver a
+      <a href="https://render.com/" target="_blank">Render.com</a> ingyenes
+      tárhelyén fut, ezért az első betöltés 60mp-ig is eltarthat
+    </p>
+  </div>
+  }
+
   <ul class="todo_list">
     @for (todo of renderedTodos(); track todo.id) {
     <li
@@ -90,7 +107,7 @@
       (requestCloseForm)="requestCloseTodoForm.emit()"
     />
   </div>
-  }
+  } @if (!dataLoading()) {
 
   <div class="open_form_container">
     <button
@@ -100,4 +117,5 @@
       Új feladat hozzáadása +
     </button>
   </div>
+  }
 </div>
