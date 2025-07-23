@@ -14,9 +14,8 @@ import { CommonModule } from '@angular/common';
 import { TodoService } from '../../services/todoService';
 import { TodoModel } from '../../models/todoModel';
 import { Form } from '../form/form';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { FiltersService } from '../../services/filtersService';
-import { sortTodos } from '../../shared/utilities';
+import { sortTodosBydate } from '../../shared/utilities';
 
 @Component({
   selector: 'app-todos-section',
@@ -24,7 +23,7 @@ import { sortTodos } from '../../shared/utilities';
   styleUrl: './todoSection.scss',
   imports: [FormsModule, Form, CommonModule],
 })
-export class TodoSection {
+export class TodoSection implements OnInit {
   // --- DEPENDENCIES --- //
 
   private todoService = inject(TodoService);
@@ -76,13 +75,17 @@ export class TodoSection {
     }
 
     if (categoryFilter === 'Mind') {
-      return sortTodos(filterdByDefaultTodos);
+      return sortTodosBydate(filterdByDefaultTodos);
     }
 
-    return sortTodos(
+    return sortTodosBydate(
       filterdByDefaultTodos.filter((t) => t.category.name === categoryFilter)
     );
   });
+
+  ngOnInit(): void {
+    this.todoService.getAllTodos();
+  } // get all todos on first page load
 
   // --- PUBLIC METHODS --- //
 

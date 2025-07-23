@@ -41,18 +41,6 @@
         "color": "red",
         "id": "cfb3bb37-ca24-4a22-99f9-89084bd2ca15"
       }
-    },
-    {
-      "id": "acc58e1c-692e-4243-a062-ca3f0f9d8a00",
-      "title": "aaaaaaaaaa",
-      "deadline": "2025-08-19",
-      "isCompleted": false,
-      "category": {
-        "id": "dfc6",
-        "name": "Munka",
-        "isActive": false,
-        "color": "red"
-      }
     }
   ],
   "categoryFilters": [

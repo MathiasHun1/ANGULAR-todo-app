@@ -1,100 +1,106 @@
-import { inject, Injectable, Signal, signal } from '@angular/core';
-import { TodoModel, TodoModelBase } from '../models/todoModel';
-import { v4 as uuidv4 } from 'uuid';
-import { NotificationService } from './notificationService';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { inject, Injectable, Signal, signal } from "@angular/core";
+import { TodoModel, TodoModelBase } from "../models/todoModel";
+import { v4 as uuidv4 } from "uuid";
+import { NotificationService } from "./notificationService";
+import { HttpErrorResponse } from "@angular/common/http";
+import { Apiservice } from "./apiService";
+import { forkJoin } from "rxjs";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class TodoService {
-  // private readonly baseUrl = 'http://localhost:3000/todos';
-  private readonly baseUrl = `${environment.apiUrl}/todos`;
-
-  private http = inject(HttpClient);
   private notificationService = inject(NotificationService);
-
-  //initialize the data on first load
-  constructor() {
-    this.getAllTodos();
-  }
+  private apiService = inject(Apiservice);
 
   // ************ Public *********** //
   loading = signal(true);
-  todos = signal<TodoModel[] | undefined>([]);
+  todos = signal<TodoModel[]>([]);
 
   getAllTodos(): void {
-    const fethedTodos$ = this.http.get(this.baseUrl) as Observable<TodoModel[]>;
-    fethedTodos$.subscribe({
-      next: (todos) => {
+    this.loading.set(true);
+    this.apiService.getAllTodos().subscribe({
+      next: (todos: TodoModel[]) => {
         this.todos.set(todos);
         this.loading.set(false);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.notificationService.setWarningMessage("Hiba történt a feladatok betöltése során");
+        this.loading.set(false);
+        console.error("Error fetching todos data: ", error);
       },
     });
   }
 
   addTodo(todo: TodoModelBase): void {
-    const newTodo: TodoModel = { ...todo, id: uuidv4() };
-
-    const result$ = this.http.post<TodoModel>(this.baseUrl, newTodo);
-    result$.subscribe({
-      next: (response) => {
-        this.todos.update((original) => original?.concat(response));
-        this.notificationService.setSuccessMessage('Feladat hozzáadva');
-      }, // use pessimistic UI update
-      error: () => {
-        this.notificationService.setWarningMessage(
-          'Hiba történt a feladat hozzáadás során'
-        );
+    const newTodo: TodoModel = {
+      ...todo,
+      id: uuidv4(),
+    };
+    this.apiService.addTodo(newTodo).subscribe({
+      next: (response: TodoModel) => {
+        this.todos.update((original) => [...original, response]);
+        this.notificationService.setSuccessMessage("Feladat hozzáadva");
+      },
+      error: (error: HttpErrorResponse) => {
+        this.notificationService.setWarningMessage("Hiba történt a feladat hozzáadása során");
+        console.error("Error adding todo: ", error);
       },
     });
   }
 
   updateTodo(updatedTodo: TodoModel): void {
-    const id = updatedTodo.id;
-
-    const result$ = this.http.put(`${this.baseUrl}/${id}`, updatedTodo);
-    result$.subscribe(() => {
-      this.todos.set(
-        this.todos()?.map((t) => (t.id !== updatedTodo.id ? t : updatedTodo))
-      );
+    this.apiService.updateTodo(updatedTodo).subscribe({
+      next: () => {
+        this.todos.update((original) =>
+          original.map((t) => (t.id !== updatedTodo.id ? t : updatedTodo))
+        );
+        this.notificationService.setSuccessMessage("Feladat frissítve");
+      },
+      error: (error: HttpErrorResponse) => {
+        this.notificationService.setWarningMessage("Hiba történt a feladat frissítése során");
+        console.error("Error updating todo: ", error);
+      },
     });
   }
 
   deleteTodo(id: string): void {
-    const deletedTodo = this.todos()?.find((t) => t.id === id);
+    const deletedTodo = this.todos().find((t) => t.id === id);
+    if (!deletedTodo) return;
 
-    if (deletedTodo) {
-      const result$ = this.http.delete(`${this.baseUrl}/${id}`);
-      result$.subscribe(() => {
-        this.todos.update((original) => original?.filter((t) => t.id !== id));
-        this.notificationService.setWarningMessage(
-          `"${deletedTodo.title}" feladat törölve`
-        );
-      });
-    }
+    this.apiService.deleteTodo(id).subscribe({
+      next: () => {
+        this.todos.update((original) => original.filter((t) => t.id !== id));
+        this.notificationService.setWarningMessage(`"${deletedTodo.title}" feladat törölve`);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.notificationService.setWarningMessage("Hiba történt a feladat törlése során");
+        console.error("Error deleting todo: ", error);
+      },
+    });
   }
 
-  deleteByCategory(categoryName: string) {
-    const todosToDelete = this.todos()?.filter(
-      (t) => t.category.name === categoryName
-    );
-
-    if (!todosToDelete) {
+  deleteByCategory(categoryName: string): void {
+    const todosToDelete = this.todos().filter((t) => t.category.name === categoryName);
+    if (!todosToDelete.length) {
       return;
     }
 
-    // get the id's of todos we want to delete
     const deletedTodoIds = todosToDelete.map((t) => t.id);
+    const deleteRequests = this.apiService.deleteTodosByIds(deletedTodoIds);
 
-    // delete the todos
-    deletedTodoIds.forEach((id) => {
-      const result$ = this.http.delete(`${this.baseUrl}/${id}`);
-      result$.subscribe(() => {
-        this.todos.update((original) => original?.filter((t) => t.id !== id));
-      });
+    // Use forkJoin to wait for all deletes, then update state once
+    forkJoin(deleteRequests).subscribe({
+      next: () => {
+        this.todos.update((original) => original.filter((t) => t.category.name !== categoryName));
+        this.notificationService.setWarningMessage(
+          `"${categoryName}" kategóriájú feladatok törölve`
+        );
+      },
+      error: (error: HttpErrorResponse) => {
+        this.notificationService.setWarningMessage("Hiba történt a feladatok törlése során");
+        console.error("Error deleting todos by category: ", error);
+      },
     });
   }
 }

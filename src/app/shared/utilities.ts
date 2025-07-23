@@ -59,7 +59,7 @@ export function createExapmleTodos(): TodoModel[] {
   ];
 }
 
-export function sortTodos(todos: TodoModel[]): TodoModel[] {
+export function sortTodosBydate(todos: TodoModel[]): TodoModel[] {
   const todosCopy = todos.map((todo) => ({
     ...todo,
     category: { ...todo.category },

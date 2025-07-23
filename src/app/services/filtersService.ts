@@ -2,7 +2,6 @@ import {
   computed,
   inject,
   Injectable,
-  Signal,
   signal,
   WritableSignal,
 } from '@angular/core';
@@ -55,11 +54,6 @@ export class FiltersService {
     }
     return 'Mind';
   });
-
-  //initialize category filters
-  constructor() {
-    this.getAllCategoryFilters();
-  }
 
   // *********** Default Filters API ************ //
   getAllDefaultFilters(): WritableSignal<DefaultFilter[]> {
@@ -147,5 +141,9 @@ export class FiltersService {
       );
       this.categoryFilters.set(updatedCategories);
     });
+  }
+
+  getTestResult() {
+    return 'ok';
   }
 }

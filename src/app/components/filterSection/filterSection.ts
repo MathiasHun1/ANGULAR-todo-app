@@ -1,4 +1,4 @@
-import { Component, inject, computed, output, input } from '@angular/core';
+import { Component, inject, output, input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FiltersService } from '../../services/filtersService';
 import { NotificationService } from '../../services/notificationService';
@@ -11,7 +11,7 @@ import { ColorPicker } from '../colorPicker/colorPicker';
   templateUrl: './filterSection.html',
   styleUrls: ['./filterSection.scss'],
 })
-export class FilterSection {
+export class FilterSection implements OnInit {
   private todoService = inject(TodoService);
   private filterSevice = inject(FiltersService);
   private notificationService = inject(NotificationService);
@@ -22,6 +22,10 @@ export class FilterSection {
   formOpen = input();
   requestCloseForm = output<{ type: 'categoryForm' }>();
   requestOpenForm = output();
+
+  ngOnInit(): void {
+    this.filterSevice.getAllCategoryFilters();
+  }
 
   setFilterActive(id: string) {
     this.filterSevice.setFilterActive(id);
